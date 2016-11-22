@@ -2,7 +2,9 @@
 <h2 id="什么情况需要使用多进程"><a href="#什么情况需要使用多进程" class="headerlink" title="什么情况需要使用多进程"></a>什么情况需要使用多进程</h2><h3 id="常驻后台任务应用"><a href="#常驻后台任务应用" class="headerlink" title="常驻后台任务应用"></a>常驻后台任务应用</h3><p>类似音乐类、跑步健身类、手机管家类等长时间需要在后台运行的应用。这些应用的特点就是，当用户切到别的应用，或者关掉手机屏幕的时候，应用本身的核心模块还在正常运行，提供服务。如果因为手机内存过低，或者是进程重要性降低，导致应用被杀掉，后台服务停止，对于这些应用来说，就是灭顶之灾。合理利用多进程，将核心后台服务模块和其他UI模块进行分离，保证应用能更稳定的提供服务，从而提升用户体验。</p>
 <h4 id="举个例子："><a href="#举个例子：" class="headerlink" title="举个例子："></a>举个例子：</h4><p>现在要做一款音乐播放器，现在有以下几种方案：<br>A. 在Activity中直接播放音乐。<br>B. 启动后台Service，播放音乐。<br>C. 启动前台Service，播放音乐。<br>D. 在新的进程中，启动后台Service，播放音乐。<br>E. 在新的进程中，启动前台Service，播放音乐。  </p>
 <h4 id="首先我们分析A"><a href="#首先我们分析A" class="headerlink" title="首先我们分析A"></a>首先我们分析A</h4><p>在A中，我们的播放器是直接在activity中启动的。首先这么做肯定是不对的，我们需要在后台播放音乐，所以当activity退出后就播不了了，之所以给出这个例子是为了控制变量作对比。<br>然后我们来看下A的使用场景。<br>音乐播放器无非是打开app，选歌，播放，退到桌面，切其他应用。我们选取了三个场景，打开、按home切换其他应用、按back退回桌面。让我们看一下A的相对应的oom_adj、oom_score、oom_score_adj的值。  </p>
-<p><img src="http://ogsbxb571.bkt.clouddn.com/pa-1.png" alt=""><font color="gray" size="2">上图为打开状态下oom_adj、oom_score、oom_score_adj的值</font>  </p>
+<p><img src="http://ogsbxb571.bkt.clouddn.com/pa-1.png" alt=""></p>
+<font color="gray" size="2">        上图为打开状态下oom_adj、oom_score、oom_score_adj的值</font>  
+
 <p><img src="http://ogsbxb571.bkt.clouddn.com/pa-2.png" alt=""><br>        <font color="gray" size="2">上图为按了Home键状态下oom_adj、oom_score、oom_score_adj的值</font>  </p>
 <p><img src="http://ogsbxb571.bkt.clouddn.com/pa-3.png" alt=""><br>        <font color="gray" size="2">上图为按了Back键状态下oom_adj、oom_score、oom_score_adj的值</font>  </p>
 <p>当我们应用在前台的时候，无论adj还是score还是score_adj，他们的值都非常的小，基本不会被LMK所杀掉，但是当我们按了Home之后，进程的adj就会急剧增大，变为7，相应的score和score_adj也会增大。在上篇文章中我们得知，adj=7即为被切换的进程，两个进程来回切换，上一个进程就会被设为7。当我们按Back键的时候，adj就会被设为9，也就是缓存进程，优先级比较低，有很大的几率被杀掉。  </p>
