@@ -56,7 +56,7 @@
     <link href="http://spinytech.github.io/2016/11/15/android_multiple_process/"/>
     <id>http://spinytech.github.io/2016/11/15/android_multiple_process/</id>
     <published>2016-11-15T12:00:00.000Z</published>
-    <updated>2016-11-22T02:05:01.000Z</updated>
+    <updated>2016-11-22T02:27:12.000Z</updated>
     
     <content type="html"><![CDATA[<p>在Android中，默认情况下，同一应用的所有组件均运行在同一进程中，且大多数应用都不会改变这一点。不过，单进程开发并不是Android应用的全部，今天我们就来说说Android中的多进程开发以及多进程的使用场景。  </p>
 <h2 id="多进程介绍"><a href="#多进程介绍" class="headerlink" title="多进程介绍"></a>多进程介绍</h2><p>本篇文章内容基于<a href="https://developer.android.com/guide/components/processes-and-threads.html#Processes" target="_blank" rel="external">Android Developer官网</a></p>
@@ -129,7 +129,7 @@
 <p>adj 代表的是oom_score_adj的值，对应的minfree则代表内存临界值。<br>比如我的测试机小米4C测试机对应的值就是：  </p>
 <p>adj: 0,58,117,176,529,1000<br>这个值其实是oom_score_adj的值，用这个值*17再除1000四舍五入取整数，就是对应的adj的值，例如第二个值58即为 58*17/1000 = 1，对应的adj也就是1，所以这6个值对应的adj是0，1，2，3，9，15。1000默认就是15  </p>
 <p>minfree: 18432,23040,27648,32256,56250,81250<br>这个值是页值，一页等于4KB，换算成MB大概是72，90，108，126，220，318<br>当可用内存小于318MB的时候，系统开始杀adj=15的进程，以此类推。 </p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上，我们大概了解了一下Android进程、多进程、生命周期以及Low Memory Killer的相关知识。至于如何运用到实际开发当中，我们在下一篇文章<a href="">《Android多进程使用场景》</a>中继续探讨。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上，我们大概了解了一下Android进程、多进程、生命周期以及Low Memory Killer的相关知识。至于如何运用到实际开发当中，我们在下一篇文章<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/" target="_blank" rel="external">《Android多进程使用场景》</a>中继续探讨。</p>
 ]]></content>
     
     <summary type="html">
