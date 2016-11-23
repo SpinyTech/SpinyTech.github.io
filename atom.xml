@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Spiny</title>
-  <subtitle>Stay Hungry, Stay Foolish, Stay Uncomfortabel</subtitle>
+  <subtitle>Stay Hungry, Stay Foolish, Stay Uncomfortable.</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://spinytech.github.io/"/>
