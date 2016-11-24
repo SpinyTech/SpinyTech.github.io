@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://spinytech.github.io/"/>
-  <updated>2016-11-24T02:15:04.000Z</updated>
+  <updated>2016-11-24T10:29:51.000Z</updated>
   <id>http://spinytech.github.io/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/"/>
     <id>http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/</id>
     <published>2016-11-17T12:00:00.000Z</published>
-    <updated>2016-11-24T02:15:04.000Z</updated>
+    <updated>2016-11-24T10:29:51.000Z</updated>
     
-    <content type="html"><![CDATA[<p>本文文章地址：<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/" target="_blank" rel="external">http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/</a>  </p>
+    <content type="html"><![CDATA[<p>本文地址：<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/" target="_blank" rel="external">http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/</a>  </p>
 <p>在上一篇<a href="http://blog.spinytech.com/2016/11/15/android_multiple_process/" target="_blank" rel="external">《Android多进程介绍》</a>中，我们大概了解了一下Android中的进程的概念以及其生命周期，另外还有Low Memory Killer相关知识。了解完原理，就该进行实践了。今天这篇文章，我们就来聊一聊，到底如何利用多进程开发，使我们的应用更稳定、用户体验更好？换言之就是Android开发中多进程开发的使用场景分析。</p>
 <h2 id="什么情况需要使用多进程"><a href="#什么情况需要使用多进程" class="headerlink" title="什么情况需要使用多进程"></a>什么情况需要使用多进程</h2><h3 id="常驻后台任务应用"><a href="#常驻后台任务应用" class="headerlink" title="常驻后台任务应用"></a>常驻后台任务应用</h3><p>类似音乐类、跑步健身类、手机管家类等长时间需要在后台运行的应用。这些应用的特点就是，当用户切到别的应用，或者关掉手机屏幕的时候，应用本身的核心模块还在正常运行，提供服务。如果因为手机内存过低，或者是进程重要性降低，导致应用被杀掉，后台服务停止，对于这些应用来说，就是灭顶之灾。合理利用多进程，将核心后台服务模块和其他UI模块进行分离，保证应用能更稳定的提供服务，从而提升用户体验。</p>
 <h4 id="举个例子："><a href="#举个例子：" class="headerlink" title="举个例子："></a>举个例子：</h4><p>现在要做一款音乐播放器，现在有以下几种方案：<br>A. 在Activity中直接播放音乐。<br>B. 启动后台Service，播放音乐。<br>C. 启动前台Service，播放音乐。<br>D. 在新的进程中，启动后台Service，播放音乐。<br>E. 在新的进程中，启动前台Service，播放音乐。  </p>
@@ -108,13 +108,13 @@
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="">《多进程开发注意事项》</a>，在这里先占个坑。  </p>
 <p>最后，多进程不一定适合所有的应用，合理利用分配进程，使程序更加稳定，才是我们追求的目标。  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x73;&#x70;&#105;&#x6e;&#x79;&#x2e;&#116;&#x65;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x73;&#x70;&#105;&#x6e;&#x79;&#x2e;&#116;&#x65;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x73;&#x70;&#x69;&#x6e;&#121;&#46;&#116;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x73;&#x70;&#x69;&#x6e;&#121;&#46;&#116;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#x6d;</a></p>
 <p>本文相关源码地址：<a href="https://github.com/SpinyTech/MultipleProcess" target="_blank" rel="external">MultipleProcess</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;本文文章地址：&lt;a href=&quot;http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://blog
+      &lt;p&gt;本文地址：&lt;a href=&quot;http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://blog.s
     
     </summary>
     
@@ -212,6 +212,37 @@
     
       &lt;p&gt;在Android中，默认情况下，同一应用的所有组件均运行在同一进程中，且大多数应用都不会改变这一点。不过，单进程开发并不是Android应用的全部，今天我们就来说说Android中的多进程开发以及多进程的使用场景。  &lt;/p&gt;
 &lt;h2 id=&quot;多进程介绍&quot;&gt;&lt;a href=
+    
+    </summary>
+    
+      <category term="Android" scheme="http://spinytech.github.io/categories/Android/"/>
+    
+    
+      <category term="多进程" scheme="http://spinytech.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android多进程注意事项</title>
+    <link href="http://spinytech.github.io/2016/11/15/android_multiple_process_notice/"/>
+    <id>http://spinytech.github.io/2016/11/15/android_multiple_process_notice/</id>
+    <published>2016-11-15T12:00:00.000Z</published>
+    <updated>2016-11-24T10:29:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文地址：<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/" target="_blank" rel="external">http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/</a>  </p>
+<h2 id="多进程开发带来的问题"><a href="#多进程开发带来的问题" class="headerlink" title="多进程开发带来的问题"></a>多进程开发带来的问题</h2><p>今天这篇文章，我们来聊聊Android多进程开发可能会遇到的问题。</p>
+<h3 id="多虚拟机潜在的问题"><a href="#多虚拟机潜在的问题" class="headerlink" title="多虚拟机潜在的问题"></a>多虚拟机潜在的问题</h3><p>由于每个进程创建以后，都会拥有独立的空间，独立的VM，所以，很多Java特性都会在多进程开发中失效。</p>
+<h4 id="1-静态变量和单例模式完全失效"><a href="#1-静态变量和单例模式完全失效" class="headerlink" title="1.静态变量和单例模式完全失效"></a>1.静态变量和单例模式完全失效</h4><p>因为进程间，内存空间是相互独立的，所以VM方法区内的静态变量也都是相互独立的。因为单利模式是基于静态变量的，所以单例也会失效。在两个不同进程访问一个相同类的静态变量，所得的值未必相同，所以在开发中请避免此类代码。</p>
+<h4 id="2-线程同步机制完全失效"><a href="#2-线程同步机制完全失效" class="headerlink" title="2.线程同步机制完全失效"></a>2.线程同步机制完全失效</h4><p>由于Java的同步机制是VM来进行调度的，两个进程拥有两个不同的VM，所以，同步也会在多进程开发中失效。synchronized关键字、voliate关键字等都是基于VM级别的同步，所以请不要跨进程去使用线程同步。比如主进程有个生产者，子进程的消费者是无法正常使用消费功能的，只能通过跨进程通信，让主进程的消费者去消费，然后再回调。</p>
+<h3 id="Application会多次创建"><a href="#Application会多次创建" class="headerlink" title="Application会多次创建"></a>Application会多次创建</h3><p>每个新进程在创建的时候，都会新建一个Application，所以多进程还会面临着Application多次创建的问题，<code>onCreate</code>方法会多次被调用。解决的办法其实也不是很麻烦，因为Application会多次创建，所以我们可以根据进程名来区分不同的进程，进行不同的初始化，同时，不要在Application中设置过多的静态变量，导致内存增加。</p>
+<h3 id="文件读写潜在的问题"><a href="#文件读写潜在的问题" class="headerlink" title="文件读写潜在的问题"></a>文件读写潜在的问题</h3><p>这里的文件指的泛指所有需要并发访问的文件，例如：本地文件，数据库文件，sharepreference等。由于Java中，文件锁、队列机制都是VM级别的，所以不同进程访问同一个文件锁是不管用的。（通过C++可以实现多进程文件锁机制，不过不在文本讨论范围内。）所以在实际开发过程中，还是避免多进程同时访问统一文件，多利用Android中IPC的C/S思想，提供服务，接口调用，避免直接去访问对方进程的文件或者数据库，提升设计美感，同时也能提升代码的稳定性。</p>
+<hr>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x73;&#x70;&#x69;&#x6e;&#x79;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#103;&#109;&#97;&#105;&#108;&#x2e;&#99;&#111;&#109;">&#x73;&#x70;&#x69;&#x6e;&#x79;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#103;&#109;&#97;&#105;&#108;&#x2e;&#99;&#111;&#109;</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文地址：&lt;a href=&quot;http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://blog.s
     
     </summary>
     
