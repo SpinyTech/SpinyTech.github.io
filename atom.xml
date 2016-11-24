@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://spinytech.github.io/"/>
-  <updated>2016-11-22T09:47:42.000Z</updated>
+  <updated>2016-11-24T02:15:04.000Z</updated>
   <id>http://spinytech.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/"/>
     <id>http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/</id>
     <published>2016-11-17T12:00:00.000Z</published>
-    <updated>2016-11-22T09:47:42.000Z</updated>
+    <updated>2016-11-24T02:15:04.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文文章地址：<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/" target="_blank" rel="external">http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/</a>  </p>
 <p>在上一篇<a href="http://blog.spinytech.com/2016/11/15/android_multiple_process/" target="_blank" rel="external">《Android多进程介绍》</a>中，我们大概了解了一下Android中的进程的概念以及其生命周期，另外还有Low Memory Killer相关知识。了解完原理，就该进行实践了。今天这篇文章，我们就来聊一聊，到底如何利用多进程开发，使我们的应用更稳定、用户体验更好？换言之就是Android开发中多进程开发的使用场景分析。</p>
@@ -48,7 +48,7 @@
 <font color="gray" size="2">上图为按了Back键状态下oom_adj、oom_score、oom_score_adj的值</font>  
 
 <p>B的情况其实是与A类似的，三种状态的adj、score_adj的值都是一样的，只有score有一点出入，其实分析源码得知，LMK杀进程的时候，score的左右其实并不大，所以我们暂时忽略它。所以，与A相比，他们的adj和score_adj的值都相同，如果遇到内存不足的情况下，这两个应用谁占得内存更大，谁就会被杀掉。不过鉴于A实在activity中播放音乐，所以B还是比A略好的方案。  </p>
-<font color="blue" size="3">//TODO 疑问</font><br>这里有朋友肯定要问了，为什么切到后台后，adj的值是7而不是5，后台不是还有service在跑吗？<br>其实这里我也没有搞太明白，至少没找到源码给我解惑。不过，网上普遍的解答是，我们所讨论的优先级是进程级别的，并非是activity、service这样的组件级别。所以对系统而言，单进程的<code>activity</code>和<code>非前台service</code>这样的应用，当退到后台的时候，系统会认为这是个后台进程，随时都可以杀掉的。<br><br>#### 接下来分析C<br>C的话是启动一个前台Service来播放音乐。让我们来看一下对应的值。<br><br><br><img src="http://ogsbxb571.bkt.clouddn.com/pc-1.png" alt=""><br><font color="gray" size="2">上图为打开状态下oom_adj、oom_score、oom_score_adj的值</font>  
+<font color="blue" size="3">//TODO 疑问</font><br>这里有朋友肯定要问了，为什么切到后台后，adj的值是7而不是5，后台不是还有service在跑吗？<br>其实这里我也没有搞太明白，至少没找到源码给我解惑。不过，网上普遍的解答是，我们所讨论的优先级是进程级别的，并非是activity、service这样的组件级别。所以对系统而言，单进程的<code>activity</code>和<code>非前台service</code>这样的应用，当切换到其他应用或者按back键退出应用的时候，系统会认为这是个缓存进程，随时都可以杀掉的。<br><br>#### 接下来分析C<br>C的话是启动一个前台Service来播放音乐。让我们来看一下对应的值。<br><br><br><img src="http://ogsbxb571.bkt.clouddn.com/pc-1.png" alt=""><br><font color="gray" size="2">上图为打开状态下oom_adj、oom_score、oom_score_adj的值</font>  
 
 <p><img src="http://ogsbxb571.bkt.clouddn.com/pc-2.png" alt=""></p>
 <font color="gray" size="2">上图为按了Home键状态下oom_adj、oom_score、oom_score_adj的值</font>  
@@ -108,7 +108,7 @@
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="">《多进程开发注意事项》</a>，在这里先占个坑。  </p>
 <p>最后，多进程不一定适合所有的应用，合理利用分配进程，使程序更加稳定，才是我们追求的目标。  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#115;&#x70;&#105;&#110;&#x79;&#46;&#116;&#101;&#99;&#104;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#x6d;">&#115;&#x70;&#105;&#110;&#x79;&#46;&#116;&#101;&#99;&#104;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x73;&#x70;&#105;&#x6e;&#x79;&#x2e;&#116;&#x65;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x73;&#x70;&#105;&#x6e;&#x79;&#x2e;&#116;&#x65;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a></p>
 <p>本文相关源码地址：<a href="https://github.com/SpinyTech/MultipleProcess" target="_blank" rel="external">MultipleProcess</a></p>
 ]]></content>
     
