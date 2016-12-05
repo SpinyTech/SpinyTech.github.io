@@ -50,7 +50,7 @@
     <link href="http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/"/>
     <id>http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/</id>
     <published>2016-11-17T12:00:00.000Z</published>
-    <updated>2016-12-05T09:37:23.000Z</updated>
+    <updated>2016-12-05T09:39:37.000Z</updated>
     
     <content type="html"><![CDATA[<p>在上一篇<a href="http://blog.spinytech.com/2016/11/15/android_multiple_process/" target="_blank" rel="external">《Android多进程介绍》</a>中，我们大概了解了一下Android中的进程的概念以及其生命周期，另外还有Low Memory Killer相关知识。了解完原理，就该进行实践了。今天这篇文章，我们就来聊一聊，到底如何利用多进程开发，使我们的应用更稳定、用户体验更好？换言之就是Android开发中多进程开发的使用场景分析。  </p>
 <font color="blue" size="3">*本篇文章已授权微信公众号 guolin_blog （郭霖）独家发布</font>  
@@ -72,7 +72,7 @@
 
 <p>当我们应用在前台的时候，无论adj还是score还是score_adj，他们的值都非常的小，基本不会被LMK所杀掉，但是当我们按了Home之后，进程的adj就会急剧增大，变为7，相应的score和score_adj也会增大。在上篇文章中我们得知，adj=7即为被切换的进程，两个进程来回切换，上一个进程就会被设为7。当我们按Back键的时候，adj就会被设为9，也就是缓存进程，优先级比较低，有很大的几率被杀掉。  </p>
 <h4 id="接着我们分析B"><a href="#接着我们分析B" class="headerlink" title="接着我们分析B"></a>接着我们分析B</h4><p>B是直接启动一个后台service并且播放音乐，这个处理看起来比A好了很多，那么实际上，B的各个场景的优先级和A又有什么不同呢？让我们来看下B的对应的打开、切换、退出相应的adj、score、score_adj的值。  </p>
-<p><img src="http://ogsbxb571.bkt.clouddn.com/pb-1.png" alt="上图为打开状态下oom\_adj、oom\_score、oom\_score\_adj的值"></p>
+<p><img src="http://ogsbxb571.bkt.clouddn.com/pb-1.png" alt="上图为打开状态下oom_adj、oom_score、oom_score_adj的值"></p>
 <font color="gray" size="2">上图为打开状态下oom_adj、oom_score、oom_score_adj的值</font>  
 
 <p><img src="http://ogsbxb571.bkt.clouddn.com/pb-2.png" alt=""></p>
@@ -142,7 +142,7 @@
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/" target="_blank" rel="external">《多进程开发注意事项》</a>。 </p>
 <p>最后，多进程不一定适合所有的应用，合理利用分配进程，使程序更加稳定，才是我们追求的目标。  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#115;&#x70;&#x69;&#110;&#121;&#x2e;&#116;&#101;&#x63;&#104;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#109;">&#115;&#x70;&#x69;&#110;&#121;&#x2e;&#116;&#101;&#x63;&#104;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x73;&#112;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#x63;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x73;&#112;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#x63;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></p>
 <p>本文相关源码地址：<a href="https://github.com/SpinyTech/MultipleProcess" target="_blank" rel="external">MultipleProcess</a></p>
 ]]></content>
     
