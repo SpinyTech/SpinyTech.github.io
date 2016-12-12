@@ -110,7 +110,7 @@
     <link href="http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/"/>
     <id>http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/</id>
     <published>2016-11-17T12:00:00.000Z</published>
-    <updated>2016-12-12T10:45:14.000Z</updated>
+    <updated>2016-12-12T10:48:26.000Z</updated>
     
     <content type="html"><![CDATA[<p>在上一篇<a href="http://blog.spinytech.com/2016/11/15/android_multiple_process/" target="_blank" rel="external">《Android多进程介绍》</a>中，我们大概了解了一下Android中的进程的概念以及其生命周期，另外还有Low Memory Killer相关知识。了解完原理，就该进行实践了。今天这篇文章，我们就来聊一聊，到底如何利用多进程开发，使我们的应用更稳定、用户体验更好？换言之就是Android开发中多进程开发的使用场景分析。  </p>
 <font color="blue" size="3">*本篇文章已授权微信公众号 guolin_blog （郭霖）独家发布</font>  
@@ -129,7 +129,7 @@
 <p><img src="http://ogsbxb571.bkt.clouddn.com/pb-2.png" alt="上图为按了Home键状态下oom_adj、oom_score、oom_score_adj的值"></p>
 <p><img src="http://ogsbxb571.bkt.clouddn.com/pb-3.png" alt="上图为按了Back键状态下oom_adj、oom_score、oom_score_adj的值"></p>
 <p>B的情况其实是与A类似的，三种状态的adj、score_adj的值都是一样的，只有score有一点出入，其实分析源码得知，LMK杀进程的时候，score的左右其实并不大，所以我们暂时忽略它。所以，与A相比，他们的adj和score_adj的值都相同，如果遇到内存不足的情况下，这两个应用谁占得内存更大，谁就会被杀掉。不过鉴于A实在activity中播放音乐，所以B还是比A略好的方案。  </p>
-<p>这里有朋友肯定要问了，为什么切到后台后，adj的值是7而不是5，后台不是还有service在跑吗？<br>这里在切换Home或者销毁的时候，都会调用<code>ActivityStack.java</code>的<code>finishCurrentActivityLocked</code>函数，然后调用到了<code>ActivityManagerService.java</code>的<code>computeOomAdjLocked</code>函数，在这里，对进程的ADJ值进行重新计算。  </p>
+<p>这里有朋友肯定要问了，为什么切到后台后，adj的值是7而不是5，后台不是还有service在跑吗？<br>我们通过查看源码可以找出来，当切换Home的时候，会调用<code>ActivityStack.java</code>的<code>finishCurrentActivityLocked</code>函数，然后调用到了<code>ActivityManagerService.java</code>的<code>computeOomAdjLocked</code>函数，在这里，对进程的ADJ值进行重新计算。  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if (app == mPreviousProcess &amp;&amp; app.activities.size() &gt; 0) &#123;</span><br><span class="line">    if (adj &gt; ProcessList.PREVIOUS_APP_ADJ) &#123;</span><br><span class="line">        adj = ProcessList.PREVIOUS_APP_ADJ;</span><br><span class="line">        schedGroup = Process.THREAD_GROUP_BG_NONINTERACTIVE;</span><br><span class="line">        app.cached = false;</span><br><span class="line">        app.adjType = &quot;previous&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    if (procState &gt; ActivityManager.PROCESS_STATE_LAST_ACTIVITY) &#123;</span><br><span class="line">        procState = ActivityManager.PROCESS_STATE_LAST_ACTIVITY;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当进程为PreviousProcess情况，则ADJ=7。<br>具体的计算流程请看这里<a href="http://gityuan.com/2016/08/07/android-adj/" target="_blank" rel="external">computeOomAdjLocked计算流程</a>  </p>
 <h4 id="接下来分析C"><a href="#接下来分析C" class="headerlink" title="接下来分析C"></a>接下来分析C</h4><p>C的话是启动一个前台Service来播放音乐。让我们来看一下对应的值。（下面三张图依次对应为【打开状态】、【按了Home键被切换状态】、【按了Back键被退出状态】）  </p>
@@ -170,7 +170,7 @@
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/" target="_blank" rel="external">《多进程开发注意事项》</a>。 </p>
 <p>最后，多进程不一定适合所有的应用，合理利用分配进程，使程序更加稳定，才是我们追求的目标。  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x73;&#112;&#x69;&#x6e;&#121;&#46;&#x74;&#101;&#x63;&#104;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#112;&#x69;&#x6e;&#121;&#46;&#x74;&#101;&#x63;&#104;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x73;&#112;&#x69;&#x6e;&#121;&#x2e;&#116;&#101;&#99;&#x68;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#x73;&#112;&#x69;&#x6e;&#121;&#x2e;&#116;&#101;&#99;&#x68;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;</a></p>
 <p>本文相关源码地址：<a href="https://github.com/SpinyTech/MultipleProcess" target="_blank" rel="external">MultipleProcess</a></p>
 ]]></content>
     
