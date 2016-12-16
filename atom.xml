@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://spinytech.github.io/"/>
-  <updated>2016-12-16T11:18:19.000Z</updated>
+  <updated>2016-12-16T11:21:45.000Z</updated>
   <id>http://spinytech.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://spinytech.github.io/2016/12/15/android_view_on_layout/"/>
     <id>http://spinytech.github.io/2016/12/15/android_view_on_layout/</id>
     <published>2016-12-15T12:00:00.000Z</published>
-    <updated>2016-12-16T11:18:19.000Z</updated>
+    <updated>2016-12-16T11:21:45.000Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇文章我们了解了View的onMeasure，那么今天我们继续来学习Android View绘制三部曲的第二步，onLayout，布局。  </p>
 <h2 id="ViewRootImpl-performLayout"><a href="#ViewRootImpl-performLayout" class="headerlink" title="ViewRootImpl#performLayout"></a>ViewRootImpl#performLayout</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">private void performLayout(WindowManager.LayoutParams lp, int desiredWindowWidth,</span><br><span class="line">        int desiredWindowHeight) &#123;</span><br><span class="line">    mLayoutRequested = false;</span><br><span class="line">    mScrollMayChange = true;</span><br><span class="line">    mInLayout = true;</span><br><span class="line"></span><br><span class="line">    final View host = mView;</span><br><span class="line">    if (DEBUG_ORIENTATION || DEBUG_LAYOUT) &#123;</span><br><span class="line">        Log.v(mTag, &quot;Laying out &quot; + host + &quot; to (&quot; +</span><br><span class="line">                host.getMeasuredWidth() + &quot;, &quot; + host.getMeasuredHeight() + &quot;)&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Trace.traceBegin(Trace.TRACE_TAG_VIEW, &quot;layout&quot;);</span><br><span class="line">    try &#123;</span><br><span class="line">        host.layout(0, 0, host.getMeasuredWidth(), host.getMeasuredHeight());</span><br><span class="line"></span><br><span class="line">        mInLayout = false;</span><br><span class="line">        //此处省略的代码是在layout的过程中，重复的requestLayout，需要做的处理。</span><br><span class="line">        //具体的处理方案是重新measure，layout。</span><br><span class="line">        ...</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        Trace.traceEnd(Trace.TRACE_TAG_VIEW);</span><br><span class="line">    &#125;</span><br><span class="line">    mInLayout = false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -33,7 +33,7 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到这里就介绍完了View绘制的layout方法。比起measure，layout可是简单多了。不过这里还预留了一些坑，没有交代清楚，比如invalidate，还有RenderNode硬件加速等，以后会写一些笔记专门针对这些知识点做梳理。</p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/" target="_blank" rel="external">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/" target="_blank" rel="external">View绘制分析笔记之onMeasure</a></p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#112;&#x69;&#110;&#121;&#x2e;&#116;&#x65;&#x63;&#104;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#115;&#112;&#x69;&#110;&#121;&#x2e;&#116;&#x65;&#x63;&#104;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#115;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#x63;&#104;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#115;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#x63;&#104;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -55,7 +55,7 @@
     <link href="http://spinytech.github.io/2016/12/12/android_view_on_measure/"/>
     <id>http://spinytech.github.io/2016/12/12/android_view_on_measure/</id>
     <published>2016-12-12T12:00:00.000Z</published>
-    <updated>2016-12-15T11:16:20.000Z</updated>
+    <updated>2016-12-16T11:21:50.000Z</updated>
     
     <content type="html"><![CDATA[<p>今天主要学习记录一下Android View绘制三部曲的第一步，onMeasure，测量。  </p>
 <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>在Activity中，所有的View都是DecorView的子View，然后DecorView又是被ViewRootImpl所控制，当Activity显示的时候，ViewRootImpl的<code>performTranversals</code>方法开始运行，这个方法很长，不过核心的三个流程就是依次调用performMeasure、performLayout、performDraw三个方法，从而完成DecorView的绘制。</p>
@@ -117,8 +117,9 @@
 <h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><p><img src="http://ogsbxb571.bkt.clouddn.com/onMeasure%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="图为onMeasure时序图"></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到这里，关于View的测绘我们大概的走了一遍。Measure的原理就是通过遍历，从上至下，利用传递的MeasureSpec以及子View的LayoutParams，依次进行测绘。不同的layout可能会进行多次的measure，所以熟读源码，合理布局，可以帮我们避免不必要的measure开销，达到提升性能的效果。  </p>
 <p>最后，感谢阅读，也希望可以和大家多多交流，共同进步。</p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/" target="_blank" rel="external">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/" target="_blank" rel="external">View绘制分析笔记之onLayout</a></p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#115;&#x70;&#x69;&#110;&#121;&#x2e;&#116;&#x65;&#99;&#x68;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#115;&#x70;&#x69;&#110;&#121;&#x2e;&#116;&#x65;&#99;&#x68;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x73;&#x70;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#104;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#x70;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#104;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -140,7 +141,7 @@
     <link href="http://spinytech.github.io/2016/12/02/android_view_draw_setcontentview/"/>
     <id>http://spinytech.github.io/2016/12/02/android_view_draw_setcontentview/</id>
     <published>2016-12-02T12:00:00.000Z</published>
-    <updated>2016-12-06T12:18:10.000Z</updated>
+    <updated>2016-12-16T11:21:41.000Z</updated>
     
     <content type="html"><![CDATA[<p>自从1983年第一台图形用户界面的个人电脑问世以来，几乎所有的PC操作系统都支持可视化操作，Android也不例外。对于所有Android Developer来说，我们接触最多的控件就是View。通常，我们使用自定义View，需要了解最多的除了事件分发，就是View的绘制过程。然而关于View的绘制，涉及到的知识点纷繁复杂，这么多的代码知识，要梳理起来，肯定是先要找个头。那么平常我们用的最多的方法是哪个方法呢？当然是<code>setContentView()</code>！</p>
 <h1 id="setContentView"><a href="#setContentView" class="headerlink" title="setContentView"></a>setContentView</h1><p>首先我们直接在Android Studio中找到一个Activity（请注意，本文分析的是Activity，如果你看的是AppCompatActivity，实际代码会有出入），然后找到setContent方法然后点进去，我们可以看到  </p>
@@ -176,8 +177,9 @@
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>到此，我们的setContentView就已经基本走完了，剩下的就等着Activity、WindowManager、WindowManagerGlobal、ViewRootImpl去调用了，这些类的调用，涉及到了Activity的启动流程，我们会在其他笔记中详细分析这一过程。  </p>
 <p>下面会上一张整个setContentView的时序图，用来巩固一下刚才的流程。  </p>
 <p><img src="http://ogsbxb571.bkt.clouddn.com/setContent%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="上图为Android setContentView的时序图"></p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/" target="_blank" rel="external">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/" target="_blank" rel="external">View绘制分析笔记之onLayout</a></p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#115;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#x65;&#x63;&#x68;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#115;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#x65;&#x63;&#x68;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;">&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
