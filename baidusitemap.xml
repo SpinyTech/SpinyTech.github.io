@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/12/12/android_view_on_measure/</loc>
+    <lastmod>2016-12-16T11:21:50.000Z</lastmod>
+    <data>
+        <display>
+        <title>View绘制分析笔记之onMeasure</title>
+        <pubTime>2016-12-12T12:00:00.000Z</pubTime>
+        
+        <tag>View绘制</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/12/15/android_view_on_layout/</loc>
+    <lastmod>2016-12-16T11:21:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>View绘制分析笔记之onLayout</title>
+        <pubTime>2016-12-15T12:00:00.000Z</pubTime>
+        
+        <tag>View绘制</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/</loc>
+    <lastmod>2016-12-16T11:21:41.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android 视图及View绘制分析笔记之setContentView</title>
+        <pubTime>2016-12-02T12:00:00.000Z</pubTime>
+        
+        <tag>View绘制</tag>
+         
+        <tag>Android视图</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/</loc>
+    <lastmod>2016-12-12T10:48:26.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android多进程使用场景</title>
+        <pubTime>2016-11-17T12:00:00.000Z</pubTime>
+        
+        <tag>多进程</tag>
+         
+        <tag>架构思考</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/</loc>
+    <lastmod>2016-11-24T10:42:50.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android多进程注意事项</title>
+        <pubTime>2016-11-20T12:00:00.000Z</pubTime>
+        
+        <tag>多进程</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/11/15/android_multiple_process/</loc>
+    <lastmod>2016-11-22T02:27:12.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android多进程介绍</title>
+        <pubTime>2016-11-15T12:00:00.000Z</pubTime>
+        
+        <tag>多进程</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/07/25/2016-07-25/</loc>
+    <lastmod>2016-07-26T05:47:58.000Z</lastmod>
+    <data>
+        <display>
+        <title>【译】如何恰当的在闪屏页加载繁重的数据和库</title>
+        <pubTime>2016-07-25T03:50:57.000Z</pubTime>
+        
+        <tag>翻译</tag>
+         
+        <tag>RxJava</tag>
+         
+        <tag>Dagger2</tag>
+         
+         
+           
+             
+              <breadCrumb title="翻译" url="http://blog.spinytech.com/categories/%E7%BF%BB%E8%AF%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+</urlset>

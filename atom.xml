@@ -4,9 +4,9 @@
   <subtitle>Stay Hungry, Stay Foolish, Stay Uncomfortable.</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://spinytech.github.io/"/>
+  <link href="http://blog.spinytech.com/"/>
   <updated>2016-12-16T11:21:45.000Z</updated>
-  <id>http://spinytech.github.io/</id>
+  <id>http://blog.spinytech.com/</id>
   
   <author>
     <name>Spiny</name>
@@ -17,8 +17,8 @@
   
   <entry>
     <title>View绘制分析笔记之onLayout</title>
-    <link href="http://spinytech.github.io/2016/12/15/android_view_on_layout/"/>
-    <id>http://spinytech.github.io/2016/12/15/android_view_on_layout/</id>
+    <link href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/"/>
+    <id>http://blog.spinytech.com/2016/12/15/android_view_on_layout/</id>
     <published>2016-12-15T12:00:00.000Z</published>
     <updated>2016-12-16T11:21:45.000Z</updated>
     
@@ -31,9 +31,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">protected void onLayout(boolean changed, int left, int top, int right, int bottom) &#123;</span><br><span class="line">    layoutChildren(left, top, right, bottom, false /* no force left gravity */);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void layoutChildren(int left, int top, int right, int bottom, boolean forceLeftGravity) &#123;</span><br><span class="line">    final int count = getChildCount();</span><br><span class="line"></span><br><span class="line">    //计算parent的上下左右</span><br><span class="line">    final int parentLeft = getPaddingLeftWithForeground();</span><br><span class="line">    final int parentRight = right - left - getPaddingRightWithForeground();</span><br><span class="line"></span><br><span class="line">    final int parentTop = getPaddingTopWithForeground();</span><br><span class="line">    final int parentBottom = bottom - top - getPaddingBottomWithForeground();</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        final View child = getChildAt(i);</span><br><span class="line">        if (child.getVisibility() != GONE) &#123;</span><br><span class="line">            final LayoutParams lp = (LayoutParams) child.getLayoutParams();</span><br><span class="line"></span><br><span class="line">            final int width = child.getMeasuredWidth();</span><br><span class="line">            final int height = child.getMeasuredHeight();</span><br><span class="line"></span><br><span class="line">            int childLeft;</span><br><span class="line">            int childTop;</span><br><span class="line"></span><br><span class="line">            int gravity = lp.gravity;</span><br><span class="line">            if (gravity == -1) &#123;</span><br><span class="line">                gravity = DEFAULT_CHILD_GRAVITY;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //获取layout默认方向，通常是从左到右，在某些特定语言的情况下是从右到左</span><br><span class="line">            final int layoutDirection = getLayoutDirection();</span><br><span class="line">            //通过刚才的方向值，计算出绝对的横向位置属性</span><br><span class="line">            final int absoluteGravity = Gravity.getAbsoluteGravity(gravity, layoutDirection);</span><br><span class="line">            //计算竖向位置属性</span><br><span class="line">            final int verticalGravity = gravity &amp; Gravity.VERTICAL_GRAVITY_MASK;</span><br><span class="line"></span><br><span class="line">            //通过位置属性，计算子View的left和right</span><br><span class="line">            switch (absoluteGravity &amp; Gravity.HORIZONTAL_GRAVITY_MASK) &#123;</span><br><span class="line">                case Gravity.CENTER_HORIZONTAL:</span><br><span class="line">                    childLeft = parentLeft + (parentRight - parentLeft - width) / 2 +</span><br><span class="line">                    lp.leftMargin - lp.rightMargin;</span><br><span class="line">                    break;</span><br><span class="line">                case Gravity.RIGHT:</span><br><span class="line">                    if (!forceLeftGravity) &#123;</span><br><span class="line">                        childLeft = parentRight - width - lp.rightMargin;</span><br><span class="line">                        break;</span><br><span class="line">                    &#125;</span><br><span class="line">                case Gravity.LEFT:</span><br><span class="line">                default:</span><br><span class="line">                    childLeft = parentLeft + lp.leftMargin;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //通过位置属性，计算子View的top和bottom</span><br><span class="line">            switch (verticalGravity) &#123;</span><br><span class="line">                case Gravity.TOP:</span><br><span class="line">                    childTop = parentTop + lp.topMargin;</span><br><span class="line">                    break;</span><br><span class="line">                case Gravity.CENTER_VERTICAL:</span><br><span class="line">                    childTop = parentTop + (parentBottom - parentTop - height) / 2 +</span><br><span class="line">                    lp.topMargin - lp.bottomMargin;</span><br><span class="line">                    break;</span><br><span class="line">                case Gravity.BOTTOM:</span><br><span class="line">                    childTop = parentBottom - height - lp.bottomMargin;</span><br><span class="line">                    break;</span><br><span class="line">                default:</span><br><span class="line">                    childTop = parentTop + lp.topMargin;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //调用子View的layout方法</span><br><span class="line">            child.layout(childLeft, childTop, childLeft + width, childTop + height);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><p><img src="http://ogsbxb571.bkt.clouddn.com/onLayout%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="图为View layout 时序图"></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到这里就介绍完了View绘制的layout方法。比起measure，layout可是简单多了。不过这里还预留了一些坑，没有交代清楚，比如invalidate，还有RenderNode硬件加速等，以后会写一些笔记专门针对这些知识点做梳理。</p>
-<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/" target="_blank" rel="external">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/" target="_blank" rel="external">View绘制分析笔记之onMeasure</a></p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a></p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#115;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#x63;&#104;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#115;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#x63;&#104;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#115;&#112;&#x69;&#x6e;&#121;&#46;&#116;&#x65;&#99;&#104;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#115;&#112;&#x69;&#x6e;&#121;&#46;&#116;&#x65;&#99;&#104;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -43,17 +43,17 @@
     
     </summary>
     
-      <category term="Android" scheme="http://spinytech.github.io/categories/Android/"/>
+      <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="View绘制" scheme="http://spinytech.github.io/tags/View%E7%BB%98%E5%88%B6/"/>
+      <category term="View绘制" scheme="http://blog.spinytech.com/tags/View%E7%BB%98%E5%88%B6/"/>
     
   </entry>
   
   <entry>
     <title>View绘制分析笔记之onMeasure</title>
-    <link href="http://spinytech.github.io/2016/12/12/android_view_on_measure/"/>
-    <id>http://spinytech.github.io/2016/12/12/android_view_on_measure/</id>
+    <link href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/"/>
+    <id>http://blog.spinytech.com/2016/12/12/android_view_on_measure/</id>
     <published>2016-12-12T12:00:00.000Z</published>
     <updated>2016-12-16T11:21:50.000Z</updated>
     
@@ -117,9 +117,9 @@
 <h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><p><img src="http://ogsbxb571.bkt.clouddn.com/onMeasure%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="图为onMeasure时序图"></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到这里，关于View的测绘我们大概的走了一遍。Measure的原理就是通过遍历，从上至下，利用传递的MeasureSpec以及子View的LayoutParams，依次进行测绘。不同的layout可能会进行多次的measure，所以熟读源码，合理布局，可以帮我们避免不必要的measure开销，达到提升性能的效果。  </p>
 <p>最后，感谢阅读，也希望可以和大家多多交流，共同进步。</p>
-<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/" target="_blank" rel="external">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/" target="_blank" rel="external">View绘制分析笔记之onLayout</a></p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a></p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x73;&#x70;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#104;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#x70;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#104;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x73;&#112;&#105;&#x6e;&#x79;&#x2e;&#x74;&#101;&#99;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#x73;&#112;&#105;&#x6e;&#x79;&#x2e;&#x74;&#101;&#99;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -129,17 +129,17 @@
     
     </summary>
     
-      <category term="Android" scheme="http://spinytech.github.io/categories/Android/"/>
+      <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="View绘制" scheme="http://spinytech.github.io/tags/View%E7%BB%98%E5%88%B6/"/>
+      <category term="View绘制" scheme="http://blog.spinytech.com/tags/View%E7%BB%98%E5%88%B6/"/>
     
   </entry>
   
   <entry>
     <title>Android 视图及View绘制分析笔记之setContentView</title>
-    <link href="http://spinytech.github.io/2016/12/02/android_view_draw_setcontentview/"/>
-    <id>http://spinytech.github.io/2016/12/02/android_view_draw_setcontentview/</id>
+    <link href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/"/>
+    <id>http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/</id>
     <published>2016-12-02T12:00:00.000Z</published>
     <updated>2016-12-16T11:21:41.000Z</updated>
     
@@ -177,9 +177,9 @@
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>到此，我们的setContentView就已经基本走完了，剩下的就等着Activity、WindowManager、WindowManagerGlobal、ViewRootImpl去调用了，这些类的调用，涉及到了Activity的启动流程，我们会在其他笔记中详细分析这一过程。  </p>
 <p>下面会上一张整个setContentView的时序图，用来巩固一下刚才的流程。  </p>
 <p><img src="http://ogsbxb571.bkt.clouddn.com/setContent%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="上图为Android setContentView的时序图"></p>
-<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/" target="_blank" rel="external">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/" target="_blank" rel="external">View绘制分析笔记之onLayout</a></p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a></p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;">&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x73;&#112;&#x69;&#x6e;&#x79;&#x2e;&#116;&#101;&#99;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#x73;&#112;&#x69;&#x6e;&#x79;&#x2e;&#116;&#101;&#99;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -188,53 +188,53 @@
     
     </summary>
     
-      <category term="Android" scheme="http://spinytech.github.io/categories/Android/"/>
+      <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="View绘制" scheme="http://spinytech.github.io/tags/View%E7%BB%98%E5%88%B6/"/>
+      <category term="View绘制" scheme="http://blog.spinytech.com/tags/View%E7%BB%98%E5%88%B6/"/>
     
-      <category term="Android视图" scheme="http://spinytech.github.io/tags/Android%E8%A7%86%E5%9B%BE/"/>
+      <category term="Android视图" scheme="http://blog.spinytech.com/tags/Android%E8%A7%86%E5%9B%BE/"/>
     
   </entry>
   
   <entry>
     <title>Android多进程注意事项</title>
-    <link href="http://spinytech.github.io/2016/11/20/android_multiple_process_notice/"/>
-    <id>http://spinytech.github.io/2016/11/20/android_multiple_process_notice/</id>
+    <link href="http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/"/>
+    <id>http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/</id>
     <published>2016-11-20T12:00:00.000Z</published>
     <updated>2016-11-24T10:42:50.000Z</updated>
     
-    <content type="html"><![CDATA[<p>上篇文章<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/" target="_blank" rel="external">《Android多进程使用场景》</a>中，我们分析了一下多进程的使用场景，今天这篇文章，我们来聊聊Android多进程开发过程中可能会遇到的问题。</p>
+    <content type="html"><![CDATA[<p>上篇文章<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/">《Android多进程使用场景》</a>中，我们分析了一下多进程的使用场景，今天这篇文章，我们来聊聊Android多进程开发过程中可能会遇到的问题。</p>
 <h3 id="多虚拟机潜在的问题"><a href="#多虚拟机潜在的问题" class="headerlink" title="多虚拟机潜在的问题"></a>多虚拟机潜在的问题</h3><p>由于每个进程创建以后，都会拥有独立的空间，独立的VM，所以，很多Java特性都会在多进程开发中失效。</p>
 <h4 id="1-静态变量和单例模式完全失效"><a href="#1-静态变量和单例模式完全失效" class="headerlink" title="1.静态变量和单例模式完全失效"></a>1.静态变量和单例模式完全失效</h4><p>因为进程间，内存空间是相互独立的，所以VM方法区内的静态变量也都是相互独立的。因为单利模式是基于静态变量的，所以单例也会失效。在两个不同进程访问一个相同类的静态变量，所得的值未必相同，所以在开发中请避免此类代码。</p>
 <h4 id="2-线程同步机制完全失效"><a href="#2-线程同步机制完全失效" class="headerlink" title="2.线程同步机制完全失效"></a>2.线程同步机制完全失效</h4><p>由于Java的同步机制是VM来进行调度的，两个进程拥有两个不同的VM，所以，同步也会在多进程开发中失效。synchronized关键字、voliate关键字等都是基于VM级别的同步，所以请不要跨进程去使用线程同步。比如主进程有个生产者，子进程的消费者是无法正常使用消费功能的，只能通过跨进程通信，让主进程的消费者去消费，然后再回调。</p>
 <h3 id="Application会多次创建"><a href="#Application会多次创建" class="headerlink" title="Application会多次创建"></a>Application会多次创建</h3><p>每个新进程在创建的时候，都会新建一个Application，所以多进程还会面临着Application多次创建的问题，<code>onCreate</code>方法会多次被调用。解决的办法其实也不是很麻烦，因为Application会多次创建，所以我们可以根据进程名来区分不同的进程，进行不同的初始化，同时，不要在Application中设置过多的静态变量，导致内存增加。</p>
 <h3 id="文件读写潜在的问题"><a href="#文件读写潜在的问题" class="headerlink" title="文件读写潜在的问题"></a>文件读写潜在的问题</h3><p>这里的文件指的泛指所有需要并发访问的文件，例如：本地文件，数据库文件，sharepreference等。由于Java中，文件锁、队列机制都是VM级别的，所以不同进程访问同一个文件锁是不管用的。（通过C++可以实现多进程文件锁机制，不过不在文本讨论范围内。）所以在实际开发过程中，还是避免多进程同时访问统一文件，多利用Android中IPC的C/S思想，提供服务，接口调用，避免直接去访问对方进程的文件或者数据库，提升设计美感，同时也能提升代码的稳定性。</p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x73;&#x70;&#x69;&#x6e;&#x79;&#x2e;&#116;&#x65;&#x63;&#x68;&#64;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#x73;&#x70;&#x69;&#x6e;&#x79;&#x2e;&#116;&#x65;&#x63;&#x68;&#64;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x73;&#112;&#105;&#x6e;&#x79;&#x2e;&#x74;&#101;&#x63;&#104;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#x73;&#112;&#105;&#x6e;&#x79;&#x2e;&#x74;&#101;&#x63;&#104;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;上篇文章&lt;a href=&quot;http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;《Android多进程使用场
+      &lt;p&gt;上篇文章&lt;a href=&quot;http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/&quot;&gt;《Android多进程使用场景》&lt;/a&gt;中，我们分析了一下多进程的使用场景，今天这篇文章，
     
     </summary>
     
-      <category term="Android" scheme="http://spinytech.github.io/categories/Android/"/>
+      <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="多进程" scheme="http://spinytech.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
   </entry>
   
   <entry>
     <title>Android多进程使用场景</title>
-    <link href="http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/"/>
-    <id>http://spinytech.github.io/2016/11/17/android_multiple_process_usage_scenario/</id>
+    <link href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/"/>
+    <id>http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/</id>
     <published>2016-11-17T12:00:00.000Z</published>
     <updated>2016-12-12T10:48:26.000Z</updated>
     
-    <content type="html"><![CDATA[<p>在上一篇<a href="http://blog.spinytech.com/2016/11/15/android_multiple_process/" target="_blank" rel="external">《Android多进程介绍》</a>中，我们大概了解了一下Android中的进程的概念以及其生命周期，另外还有Low Memory Killer相关知识。了解完原理，就该进行实践了。今天这篇文章，我们就来聊一聊，到底如何利用多进程开发，使我们的应用更稳定、用户体验更好？换言之就是Android开发中多进程开发的使用场景分析。  </p>
+    <content type="html"><![CDATA[<p>在上一篇<a href="http://blog.spinytech.com/2016/11/15/android_multiple_process/">《Android多进程介绍》</a>中，我们大概了解了一下Android中的进程的概念以及其生命周期，另外还有Low Memory Killer相关知识。了解完原理，就该进行实践了。今天这篇文章，我们就来聊一聊，到底如何利用多进程开发，使我们的应用更稳定、用户体验更好？换言之就是Android开发中多进程开发的使用场景分析。  </p>
 <font color="blue" size="3">*本篇文章已授权微信公众号 guolin_blog （郭霖）独家发布</font>  
 
 
@@ -289,32 +289,32 @@
 <p>多进程不光解决OOM问题，还能更有效、合理的利用内存。我们可以在适当的时候生成新的进程，在不需要的时候及时杀掉，合理分配，提升用户体验。减少系统被杀掉的风险。  </p>
 <p>多进程还能带来一个好处就是，单一进程崩溃并不影响整体应用的使用。例如我在图片浏览进程打开了一个过大的图片，java heap 申请内存失败，但是不影响我主进程的使用，而且，还能通过监控进程，将这个错误上报给系统，告知他在什么机型、环境下、产生了什么样的Bug，提升用户体验。  </p>
 <p>再一个好处就是，当我们的应用开发越来越大，模块越来越多，团队规模也越来越大，协作开发也是个很麻烦的事情。项目解耦，模块化，是这阶段的目标。通过模块解耦，开辟新的进程，独立的JVM，来达到数据解耦目的。模块之间互不干预，团队并行开发，责任分工也明确。至于模块化开发与多进程的结合，后续会写一篇专门的文章来研究这个问题。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/" target="_blank" rel="external">《多进程开发注意事项》</a>。 </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/">《多进程开发注意事项》</a>。 </p>
 <p>最后，多进程不一定适合所有的应用，合理利用分配进程，使程序更加稳定，才是我们追求的目标。  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#115;&#112;&#x69;&#110;&#121;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#115;&#112;&#x69;&#110;&#121;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#115;&#x70;&#x69;&#x6e;&#121;&#46;&#116;&#101;&#99;&#x68;&#64;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#115;&#x70;&#x69;&#x6e;&#121;&#46;&#116;&#101;&#99;&#x68;&#64;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
 <p>本文相关源码地址：<a href="https://github.com/SpinyTech/MultipleProcess" target="_blank" rel="external">MultipleProcess</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;在上一篇&lt;a href=&quot;http://blog.spinytech.com/2016/11/15/android_multiple_process/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;《Android多进程介绍》&lt;/a&gt;中，我们大概了解了一下
+      &lt;p&gt;在上一篇&lt;a href=&quot;http://blog.spinytech.com/2016/11/15/android_multiple_process/&quot;&gt;《Android多进程介绍》&lt;/a&gt;中，我们大概了解了一下Android中的进程的概念以及其生命周期，另外还有Low M
     
     </summary>
     
-      <category term="Android" scheme="http://spinytech.github.io/categories/Android/"/>
+      <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="架构思考" scheme="http://spinytech.github.io/tags/%E6%9E%B6%E6%9E%84%E6%80%9D%E8%80%83/"/>
+      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
-      <category term="多进程" scheme="http://spinytech.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+      <category term="架构思考" scheme="http://blog.spinytech.com/tags/%E6%9E%B6%E6%9E%84%E6%80%9D%E8%80%83/"/>
     
   </entry>
   
   <entry>
     <title>Android多进程介绍</title>
-    <link href="http://spinytech.github.io/2016/11/15/android_multiple_process/"/>
-    <id>http://spinytech.github.io/2016/11/15/android_multiple_process/</id>
+    <link href="http://blog.spinytech.com/2016/11/15/android_multiple_process/"/>
+    <id>http://blog.spinytech.com/2016/11/15/android_multiple_process/</id>
     <published>2016-11-15T12:00:00.000Z</published>
     <updated>2016-11-22T02:27:12.000Z</updated>
     
@@ -389,7 +389,7 @@
 <p>adj 代表的是oom_score_adj的值，对应的minfree则代表内存临界值。<br>比如我的测试机小米4C测试机对应的值就是：  </p>
 <p>adj: 0,58,117,176,529,1000<br>这个值其实是oom_score_adj的值，用这个值*17再除1000四舍五入取整数，就是对应的adj的值，例如第二个值58即为 58*17/1000 = 1，对应的adj也就是1，所以这6个值对应的adj是0，1，2，3，9，15。1000默认就是15  </p>
 <p>minfree: 18432,23040,27648,32256,56250,81250<br>这个值是页值，一页等于4KB，换算成MB大概是72，90，108，126，220，318<br>当可用内存小于318MB的时候，系统开始杀adj=15的进程，以此类推。 </p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上，我们大概了解了一下Android进程、多进程、生命周期以及Low Memory Killer的相关知识。至于如何运用到实际开发当中，我们在下一篇文章<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/" target="_blank" rel="external">《Android多进程使用场景》</a>中继续探讨。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上，我们大概了解了一下Android进程、多进程、生命周期以及Low Memory Killer的相关知识。至于如何运用到实际开发当中，我们在下一篇文章<a href="http://blog.spinytech.com/2016/11/17/android_multiple_process_usage_scenario/">《Android多进程使用场景》</a>中继续探讨。</p>
 ]]></content>
     
     <summary type="html">
@@ -399,17 +399,17 @@
     
     </summary>
     
-      <category term="Android" scheme="http://spinytech.github.io/categories/Android/"/>
+      <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="多进程" scheme="http://spinytech.github.io/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
   </entry>
   
   <entry>
     <title>【译】如何恰当的在闪屏页加载繁重的数据和库</title>
-    <link href="http://spinytech.github.io/2016/07/25/2016-07-25/"/>
-    <id>http://spinytech.github.io/2016/07/25/2016-07-25/</id>
+    <link href="http://blog.spinytech.com/2016/07/25/2016-07-25/"/>
+    <id>http://blog.spinytech.com/2016/07/25/2016-07-25/</id>
     <published>2016-07-25T03:50:57.000Z</published>
     <updated>2016-07-26T05:47:58.000Z</updated>
     
@@ -457,14 +457,14 @@
     
     </summary>
     
-      <category term="翻译" scheme="http://spinytech.github.io/categories/%E7%BF%BB%E8%AF%91/"/>
+      <category term="翻译" scheme="http://blog.spinytech.com/categories/%E7%BF%BB%E8%AF%91/"/>
     
     
-      <category term="翻译" scheme="http://spinytech.github.io/tags/%E7%BF%BB%E8%AF%91/"/>
+      <category term="翻译" scheme="http://blog.spinytech.com/tags/%E7%BF%BB%E8%AF%91/"/>
     
-      <category term="RxJava" scheme="http://spinytech.github.io/tags/RxJava/"/>
+      <category term="RxJava" scheme="http://blog.spinytech.com/tags/RxJava/"/>
     
-      <category term="Dagger2" scheme="http://spinytech.github.io/tags/Dagger2/"/>
+      <category term="Dagger2" scheme="http://blog.spinytech.com/tags/Dagger2/"/>
     
   </entry>
   
