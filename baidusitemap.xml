@@ -3,6 +3,25 @@
 
 
     
+  <url>
+    <loc>http://blog.spinytech.com/2016/12/19/android_view_on_draw/</loc>
+    <lastmod>2016-12-22T03:16:23.000Z</lastmod>
+    <data>
+        <display>
+        <title>View绘制分析笔记之onDraw</title>
+        <pubTime>2016-12-19T12:00:00.000Z</pubTime>
+        
+        <tag>View绘制</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
     
   <url>
     <loc>http://blog.spinytech.com/2016/12/12/android_view_on_measure/</loc>
