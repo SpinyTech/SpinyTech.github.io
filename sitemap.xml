@@ -2,30 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.spinytech.com/2016/12/19/android_view_on_draw/</loc>
-    
-    <lastmod>2016-12-22T03:16:23.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.spinytech.com/2016/12/12/android_view_on_measure/</loc>
-    
-    <lastmod>2016-12-16T11:21:50.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.spinytech.com/2016/12/15/android_view_on_layout/</loc>
     
-    <lastmod>2016-12-16T11:21:45.000Z</lastmod>
+    <lastmod>2016-12-22T03:19:33.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/</loc>
     
-    <lastmod>2016-12-16T11:21:41.000Z</lastmod>
+    <lastmod>2016-12-22T03:19:18.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.spinytech.com/2016/12/12/android_view_on_measure/</loc>
+    
+    <lastmod>2016-12-22T03:18:57.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.spinytech.com/2016/12/19/android_view_on_draw/</loc>
+    
+    <lastmod>2016-12-22T03:18:31.000Z</lastmod>
     
   </url>
   
