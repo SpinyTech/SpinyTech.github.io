@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.spinytech.com/2016/12/28/android_modularization/</loc>
+    
+    <lastmod>2017-01-14T11:24:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.spinytech.com/2016/12/15/android_view_on_layout/</loc>
     
     <lastmod>2016-12-22T03:19:33.000Z</lastmod>

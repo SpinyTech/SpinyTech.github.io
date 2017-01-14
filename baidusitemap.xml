@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://blog.spinytech.com/2016/12/28/android_modularization/</loc>
+    <lastmod>2017-01-14T11:24:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android架构思考(模块化、多进程)</title>
+        <pubTime>2016-12-28T12:00:00.000Z</pubTime>
+        
+        <tag>架构思考</tag>
+         
+        <tag>模块化</tag>
+         
+        <tag>多进程</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.spinytech.com/2016/12/15/android_view_on_layout/</loc>
     <lastmod>2016-12-22T03:19:33.000Z</lastmod>
     <data>
@@ -93,9 +117,9 @@
         <title>Android多进程使用场景</title>
         <pubTime>2016-11-17T12:00:00.000Z</pubTime>
         
-        <tag>多进程</tag>
-         
         <tag>架构思考</tag>
+         
+        <tag>多进程</tag>
          
          
            
