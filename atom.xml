@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.spinytech.com/"/>
-  <updated>2017-01-14T11:24:11.000Z</updated>
+  <updated>2017-01-23T15:16:36.000Z</updated>
   <id>http://blog.spinytech.com/</id>
   
   <author>
@@ -14,6 +14,44 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>高并发对象池思考</title>
+    <link href="http://blog.spinytech.com/2017/01/10/concurrent_object_pool/"/>
+    <id>http://blog.spinytech.com/2017/01/10/concurrent_object_pool/</id>
+    <published>2017-01-10T12:00:00.000Z</published>
+    <updated>2017-01-23T15:16:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>这两天在整理一套Android的路由框架，在整理的过程中，发现在路由消息传递过程中，传输载体类会大量的生成，对于这种载体类来说，他们本身是可重复利用的，并不需要大量的创建，大量的废弃，所以，我打算引入对象池，来解决类的重复创建问题。</p>
+<h3 id="对象的生命周期"><a href="#对象的生命周期" class="headerlink" title="对象的生命周期"></a>对象的生命周期</h3><p>Java对象的生命周期大致包括三个阶段：<strong>对象的创建，对象的使用，对象的清除</strong>。因此，对象的生命周期长度可用如下的表达式表示：T = T1 + T2 +T3。其中T1表示对象的创建时间，T2表示对象的使用时间，而T3则表示其清除时间。由此，我们可以看出，只有T2是真正有效的时间，而T1、T3则是对象本身的开销。所以，避免和减少T1和T3的时间，能有效的提升程序的性能。</p>
+<h3 id="对象池"><a href="#对象池" class="headerlink" title="对象池"></a>对象池</h3><p>在EffectJava的第五条建议中，明确给出了<strong>“避免创建不必要的对象”</strong>这样的建议。对于<strong>可重复利用的对象</strong>，我们不应该频繁的创建销毁，而是应该反复利用。  </p>
+<p>重复利用对象，我们就需要建一个对象池，把所有可复用的对象都统一放到池中，同时对外提供<code>obtain()</code>方法来获取对象。通常，我们利用静态对象数组来实现对象池。</p>
+<p>对象池的初始化策略分为两种，一种是统一初始化，即在特定时机统一初始化池内所有对象，第一次使用的时候会有一定的开销。另一种是即时初始化，就是在使用中进行初始化，每次都会有一定的开销，直到池内充满。</p>
+<h3 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h3><p>在对象池创建好之后，我们就需要考虑如何分配、回收对象池的对象了。由于是路由系统的载体类，所以势必会有多线程进行访问，我们还要考虑到线程安全，以及并发性能。  </p>
+<p>关于线程安全，一般的做法是通过<code>synchronized</code>关键字来进行线程同步。不过这么做的话，相当于是对<code>obtain()</code>函数加了<strong>悲观锁</strong>。这么做虽然可以有效的防止同步问题，而且<code>synchronized</code>关键字也经过了JVM多次性能优化，不过，在性能上依然不能满足高并发的要求。</p>
+<p>这时候我们参考可以参考<code>ConcurrentHashMap</code>，利用<strong>CAS算法</strong>(非阻塞同步算法)实现乐观锁。我们在类中创建一个<code>AtomicBoolean</code>变量，命名为<code>isIdle</code>，默认值为true(空闲状态)，当多个线程去争抢一个对象的时候，会调用<code>isIdle.compareAndSet(true,false)</code>，该方法会返回boolean类型的结果，如果返回true，则表明竞争成功，isIdle被设置为false（占用中），如果返回false，则表明该类已经被别的线程所占用，重新申请另外的对象，直到该对象的isIdle竞争成功。</p>
+<p>相关代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">// 顺序计数器</span><br><span class="line">private static AtomicInteger sIndex;</span><br><span class="line">// 空闲标识</span><br><span class="line">AtomicBoolean isIdle;</span><br><span class="line">// 计数器重置参数</span><br><span class="line">private static final int RESET_NUM = 1000;</span><br><span class="line">public static ConcurrentRouterRequest obtain()&#123;</span><br><span class="line">    // 获取下一个计数器的值</span><br><span class="line">    int index = sIndex.getAndIncrement();</span><br><span class="line">    // 如果计数器过大，则置0</span><br><span class="line">    if(index&gt;RESET_NUM)&#123;</span><br><span class="line">        sIndex.compareAndSet(index,0);</span><br><span class="line">        if(index&gt;RESET_NUM*2)&#123;</span><br><span class="line">            sIndex.set(0);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 计算计数器对应对象数组的对象下标</span><br><span class="line">    int num = index&amp;(length-1);</span><br><span class="line"></span><br><span class="line">    // 获取对应对象</span><br><span class="line">    ConcurrentRouterRequest target = table[num];</span><br><span class="line"></span><br><span class="line">    // 竞争该对象的空闲标识，其中第一个参数true是我们希望的值，第二个参数是需要设置的值false。  </span><br><span class="line">    // 如果设置成功，那么直接返回target，如果失败，则继续寻找下一个空闲的对象。</span><br><span class="line">    if(target.isIdle.compareAndSet(true,false))&#123;</span><br><span class="line">        return target;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        return obtain();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实际对比"><a href="#实际对比" class="headerlink" title="实际对比"></a>实际对比</h3><p>//TODO</p>
+<hr>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x73;&#x70;&#x69;&#x6e;&#121;&#x2e;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;">&#x73;&#x70;&#x69;&#x6e;&#121;&#x2e;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这两天在整理一套Android的路由框架，在整理的过程中，发现在路由消息传递过程中，传输载体类会大量的生成，对于这种载体类来说，他们本身是可重复利用的，并不需要大量的创建，大量的废弃，所以，我打算引入对象池，来解决类的重复创建问题。&lt;/p&gt;
+&lt;h3 id=&quot;对象的生命周期&quot;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://blog.spinytech.com/categories/Java/"/>
+    
+    
+      <category term="高并发" scheme="http://blog.spinytech.com/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+      <category term="对象池" scheme="http://blog.spinytech.com/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0/"/>
+    
+  </entry>
   
   <entry>
     <title>Android架构思考(模块化、多进程)</title>

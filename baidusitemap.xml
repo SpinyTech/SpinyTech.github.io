@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://blog.spinytech.com/2017/01/10/concurrent_object_pool/</loc>
+    <lastmod>2017-01-23T15:16:36.000Z</lastmod>
+    <data>
+        <display>
+        <title>高并发对象池思考</title>
+        <pubTime>2017-01-10T12:00:00.000Z</pubTime>
+        
+        <tag>高并发</tag>
+         
+        <tag>对象池</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://blog.spinytech.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://blog.spinytech.com/2016/12/28/android_modularization/</loc>
     <lastmod>2017-01-14T11:24:11.000Z</lastmod>
     <data>
