@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.spinytech.com/"/>
-  <updated>2017-01-24T02:38:42.000Z</updated>
+  <updated>2017-01-24T13:12:20.000Z</updated>
   <id>http://blog.spinytech.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.spinytech.com/2017/01/10/concurrent_object_pool/"/>
     <id>http://blog.spinytech.com/2017/01/10/concurrent_object_pool/</id>
     <published>2017-01-10T12:00:00.000Z</published>
-    <updated>2017-01-24T02:38:42.000Z</updated>
+    <updated>2017-01-24T13:12:20.000Z</updated>
     
     <content type="html"><![CDATA[<p>这两天在整理一套Android的路由框架，在整理的过程中，发现在路由消息传递过程中，传输载体类会大量的生成，对于这种载体类来说，他们本身是可重复利用的，并不需要大量的创建，大量的废弃，所以，我打算引入对象池，来解决类的重复创建问题。</p>
 <h3 id="对象的生命周期"><a href="#对象的生命周期" class="headerlink" title="对象的生命周期"></a>对象的生命周期</h3><p>Java对象的生命周期大致包括三个阶段：<strong>对象的创建，对象的使用，对象的清除</strong>。因此，对象的生命周期长度可用如下的表达式表示：T = T1 + T2 +T3。其中T1表示对象的创建时间，T2表示对象的使用时间，而T3则表示其清除时间。由此，我们可以看出，只有T2是真正有效的时间，而T1、T3则是对象本身的开销。所以，避免和减少T1和T3的时间，能有效的提升程序的性能。</p>
@@ -58,8 +58,13 @@
 <p>第一种情况是直接用new关键字新建对象，处理请求，最后的结果是耗时220ms，内存消耗100000*16(byte)=1.53MB。</p>
 <p>第二种情况是使用对象池处理请求，最后耗时180ms，内存消耗为64*20(byte)=1.25KB。</p>
 <p>通过对比我们可以看出，首先，由于减少了对象的创建，虽然多了同步，不过在时间性能上，对象池还是优于新建对象，大概提升了20%左右的性能。该时间还不包括GC回收的开销，如果加上的话，性能提升会更明显。其次，在内存上面，两者的差距是1000倍左右的，极大地节省了内存的开销，减少了GC的触发。</p>
+<h3 id="对象池实现"><a href="#对象池实现" class="headerlink" title="对象池实现"></a>对象池实现</h3><p>下面放一个纯Java实现的高并发对象池</p>
+<p>对象池：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public final class ObjectPool&lt;OBJECT extends ObjectPool.RecyclableObject&gt; &#123;</span><br><span class="line">    private OBJECT[] mTable;</span><br><span class="line">    private AtomicInteger mOrderNumber;</span><br><span class="line">    public static int RESET_NUM = 1000;</span><br><span class="line"></span><br><span class="line">    public ObjectPool(OBJECT[] inputArray) &#123;</span><br><span class="line">        mOrderNumber = new AtomicInteger(0);</span><br><span class="line">        mTable = inputArray;</span><br><span class="line">        if (mTable == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;The input array is null.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        int length = inputArray.length;</span><br><span class="line">        if ((length &amp; length - 1) != 0) &#123;</span><br><span class="line">            throw new RuntimeException(&quot;The length of input array is not 2^n.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void recycle(OBJECT object) &#123;</span><br><span class="line">        object.isIdle.set(true);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public OBJECT obtain() &#123;</span><br><span class="line">        int index = mOrderNumber.getAndIncrement();</span><br><span class="line">        if (index &gt; RESET_NUM) &#123;</span><br><span class="line">            mOrderNumber.compareAndSet(index, 0);</span><br><span class="line">            if (index &gt; RESET_NUM * 2) &#123;</span><br><span class="line">                mOrderNumber.set(0);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int num = index &amp; (mTable.length - 1);</span><br><span class="line"></span><br><span class="line">        OBJECT target = mTable[num];</span><br><span class="line"></span><br><span class="line">        if (target.isIdle.compareAndSet(true, false)) &#123;</span><br><span class="line">            return target;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return obtain();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public abstract static class RecyclableObject &#123;</span><br><span class="line">        AtomicBoolean isIdle = new AtomicBoolean(true);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TestObject[] array = new TestObject[32];</span><br><span class="line">        for(int i = 0 ; i &lt; 32 ;i++)&#123;</span><br><span class="line">            array[i] = new TestObject();</span><br><span class="line">        &#125;</span><br><span class="line">        final ObjectPool&lt;TestObject&gt; objectPool = new ObjectPool&lt;&gt;(array);</span><br><span class="line"></span><br><span class="line">        for(int i = 0 ; i &lt; 50; i++)&#123;</span><br><span class="line">            new Thread(&quot;Thread:&quot;+i)&#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    super.run();</span><br><span class="line">                    for(int j = 0 ; j &lt; 50 ; j++)&#123;</span><br><span class="line">                        TestObject testObject = objectPool.obtain();</span><br><span class="line">                        testObject.print(getName(),&quot;--index:&quot;+j);</span><br><span class="line">                        objectPool.recycle(testObject);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class TestObject extends ObjectPool.RecyclableObject&#123;</span><br><span class="line">        public TestObject()&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        public void print(String thread, String index)&#123;</span><br><span class="line">            System.out.println(thread+index);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#x70;&#x69;&#110;&#x79;&#46;&#116;&#101;&#x63;&#x68;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#115;&#x70;&#x69;&#110;&#x79;&#46;&#116;&#101;&#x63;&#x68;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#115;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#115;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -172,9 +177,9 @@
 </ul>
 <p>本文项目地址：<a href="https://github.com/SpinyTech/ModularizationArchitecture" target="_blank" rel="external">ModularizationArchitecture</a>，欢迎大家star、fork、提建议。</p>
 <p>另外，最近在整理注释及文档，等弄完了会上传到jcenter，目前就叫<code>ModularizationArchitecture</code>，大家觉得有好的名字可以发给我，本人英文水平实在是凑合-.-。  </p>
-<p>如果有疑问或者建议，欢迎联系我，邮箱是：<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#115;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#x65;&#x63;&#x68;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;">&#115;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#x65;&#x63;&#x68;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;</a><br>谢谢大家阅读</p>
+<p>如果有疑问或者建议，欢迎联系我，邮箱是：<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#115;&#x70;&#x69;&#x6e;&#121;&#x2e;&#x74;&#x65;&#x63;&#104;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#115;&#x70;&#x69;&#x6e;&#121;&#x2e;&#x74;&#x65;&#x63;&#104;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;</a><br>谢谢大家阅读</p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#115;&#x70;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;">&#115;&#x70;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#115;&#x70;&#105;&#x6e;&#121;&#46;&#x74;&#x65;&#x63;&#104;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#115;&#x70;&#105;&#x6e;&#121;&#46;&#x74;&#x65;&#x63;&#104;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -186,11 +191,11 @@
       <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
-    
       <category term="架构思考" scheme="http://blog.spinytech.com/tags/%E6%9E%B6%E6%9E%84%E6%80%9D%E8%80%83/"/>
     
       <category term="模块化" scheme="http://blog.spinytech.com/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/"/>
+    
+      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
   </entry>
   
@@ -230,7 +235,7 @@
 <p>到这篇文章截止，View视图三部曲就结束了，感谢阅读。</p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#115;&#x70;&#x69;&#110;&#121;&#x2e;&#x74;&#x65;&#99;&#x68;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#99;&#x6f;&#x6d;">&#115;&#x70;&#x69;&#110;&#121;&#x2e;&#x74;&#x65;&#99;&#x68;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#99;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#x73;&#112;&#x69;&#110;&#121;&#x2e;&#x74;&#101;&#99;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;">&#x73;&#112;&#x69;&#110;&#121;&#x2e;&#x74;&#101;&#99;&#x68;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -265,7 +270,7 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到这里就介绍完了View绘制的layout方法。比起measure，layout可是简单多了。不过这里还预留了一些坑，没有交代清楚，比如invalidate，还有RenderNode硬件加速等，以后会写一些笔记专门针对这些知识点做梳理。</p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x73;&#x70;&#105;&#x6e;&#121;&#46;&#x74;&#101;&#x63;&#x68;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;">&#x73;&#x70;&#105;&#x6e;&#121;&#46;&#x74;&#101;&#x63;&#x68;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#x65;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#108;&#46;&#x63;&#111;&#x6d;">&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#x65;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -351,7 +356,7 @@
 <p>最后，感谢阅读，也希望可以和大家多多交流，共同进步。</p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#115;&#112;&#105;&#x6e;&#121;&#x2e;&#x74;&#101;&#x63;&#x68;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#115;&#112;&#105;&#x6e;&#121;&#x2e;&#x74;&#101;&#x63;&#x68;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#x73;&#112;&#x69;&#x6e;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -411,7 +416,7 @@
 <p><img src="http://ogsbxb571.bkt.clouddn.com/setContent%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="上图为Android setContentView的时序图"></p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x73;&#x70;&#105;&#110;&#121;&#46;&#116;&#101;&#99;&#104;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#x70;&#105;&#110;&#121;&#46;&#116;&#101;&#99;&#104;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#115;&#x70;&#105;&#x6e;&#121;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#115;&#x70;&#105;&#x6e;&#121;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -443,7 +448,7 @@
 <h3 id="Application会多次创建"><a href="#Application会多次创建" class="headerlink" title="Application会多次创建"></a>Application会多次创建</h3><p>每个新进程在创建的时候，都会新建一个Application，所以多进程还会面临着Application多次创建的问题，<code>onCreate</code>方法会多次被调用。解决的办法其实也不是很麻烦，因为Application会多次创建，所以我们可以根据进程名来区分不同的进程，进行不同的初始化，同时，不要在Application中设置过多的静态变量，导致内存增加。</p>
 <h3 id="文件读写潜在的问题"><a href="#文件读写潜在的问题" class="headerlink" title="文件读写潜在的问题"></a>文件读写潜在的问题</h3><p>这里的文件指的泛指所有需要并发访问的文件，例如：本地文件，数据库文件，sharepreference等。由于Java中，文件锁、队列机制都是VM级别的，所以不同进程访问同一个文件锁是不管用的。（通过C++可以实现多进程文件锁机制，不过不在文本讨论范围内。）所以在实际开发过程中，还是避免多进程同时访问统一文件，多利用Android中IPC的C/S思想，提供服务，接口调用，避免直接去访问对方进程的文件或者数据库，提升设计美感，同时也能提升代码的稳定性。</p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#x73;&#112;&#x69;&#x6e;&#121;&#x2e;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;">&#x73;&#112;&#x69;&#x6e;&#121;&#x2e;&#x74;&#101;&#x63;&#x68;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x73;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#99;&#104;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#x70;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#99;&#104;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -524,7 +529,7 @@
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/">《多进程开发注意事项》</a>。 </p>
 <p>最后，多进程不一定适合所有的应用，合理利用分配进程，使程序更加稳定，才是我们追求的目标。  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#115;&#x70;&#105;&#110;&#121;&#x2e;&#x74;&#101;&#x63;&#104;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;">&#115;&#x70;&#105;&#110;&#121;&#x2e;&#x74;&#101;&#x63;&#104;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x73;&#112;&#x69;&#x6e;&#121;&#x2e;&#116;&#x65;&#99;&#x68;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#x73;&#112;&#x69;&#x6e;&#121;&#x2e;&#116;&#x65;&#99;&#x68;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
 <p>本文相关源码地址：<a href="https://github.com/SpinyTech/MultipleProcess" target="_blank" rel="external">MultipleProcess</a></p>
 ]]></content>
     
@@ -537,9 +542,9 @@
       <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
-    
       <category term="架构思考" scheme="http://blog.spinytech.com/tags/%E6%9E%B6%E6%9E%84%E6%80%9D%E8%80%83/"/>
+    
+      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
   </entry>
   
