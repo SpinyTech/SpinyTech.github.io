@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.spinytech.com/"/>
-  <updated>2017-02-05T13:50:07.000Z</updated>
+  <updated>2017-02-05T14:18:51.000Z</updated>
   <id>http://blog.spinytech.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.spinytech.com/2017/02/01/ma_get_start_cn/"/>
     <id>http://blog.spinytech.com/2017/02/01/ma_get_start_cn/</id>
     <published>2017-02-01T12:00:00.000Z</published>
-    <updated>2017-02-05T13:50:07.000Z</updated>
+    <updated>2017-02-05T14:18:51.000Z</updated>
     
     <content type="html"><![CDATA[<p><font color="red" size="4">项目地址：<a href="https://github.com/SpinyTech/ModularizationArchitecture" target="_blank" rel="external">ModularizationArchitecture</a><br>个人主页：<a href="https://github.com/SpinyTech" target="_blank" rel="external">SpinyTech</a><br>欢迎各位读者 Star Follow</font><br><br><br>ModularizationArchitecture 是Android平台上一种基于路由的多进程、组件化架构:它通过共有路由，在不引用其他模块的前提下，实现不同模块，不同进程之间的通信。它适合中型App架构的团队协作，并行开发，业务线解耦，白盒测试等场景。  </p>
 <h2 id="1-关键词定义"><a href="#1-关键词定义" class="headerlink" title="1. 关键词定义"></a>1. 关键词定义</h2><ul>
@@ -86,7 +86,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void initializeAllProcessRouter() &#123;</span><br><span class="line">    WideRouter.registerLocalRouter(&quot;com.spinytech.maindemo&quot;,MainRouterConnectService.class);</span><br><span class="line">    WideRouter.registerLocalRouter(&quot;com.spinytech.maindemo:music&quot;,MusicRouterConnectService.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="2-7-2-多进程调用"><a href="#2-7-2-多进程调用" class="headerlink" title="2.7.2 多进程调用"></a>2.7.2 多进程调用</h3><p>多进程调用与2.6中本地调用基本一样，只是在生成<code>RouterRequest</code>的时候，需要多加一个Domain，Domain就是需要调用的进程名。(在obtain<code>RouterRequest</code>的时候，如果不加domain，则默认domain是当前进程名)  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RouterRequest</span><br><span class="line">    .obtain(context)</span><br><span class="line">    .domain(&quot;com.spinytech.maindemo:music&quot;)</span><br><span class="line">    .provider(&quot;music&quot;)</span><br><span class="line">    .action(&quot;play&quot;);</span><br></pre></td></tr></table></figure>
-<h2 id="3-原理"><a href="#3-原理" class="headerlink" title="3. 原理"></a>3. 原理</h2><p>//TODO</p>
+<h2 id="3-原理"><a href="#3-原理" class="headerlink" title="3. 原理"></a>3. 原理</h2><p>整个架构都是基于路由的原理来实现的，具体的实现原理，可以参考之前的一篇关于架构思考的文章，<br><a href="http://blog.spinytech.com/2016/12/28/android_modularization/">《Android架构思考》</a>，本项目基本的设计思路都在这篇文章中有所体现。</p>
 <h2 id="4-存在缺陷"><a href="#4-存在缺陷" class="headerlink" title="4. 存在缺陷"></a>4. 存在缺陷</h2><ul>
 <li>暂不支持多个相同ShareUid的Apk之间的调用。</li>
 <li>需要继承自<code>MaApplication</code>，对原有<code>Application</code>代码有改动。</li>
@@ -97,7 +97,7 @@
 <li>优化消息传递过程中的打包拆包过程</li>
 </ul>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#x73;&#x70;&#x69;&#x6e;&#x79;&#46;&#x74;&#x65;&#x63;&#x68;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#x73;&#x70;&#x69;&#x6e;&#x79;&#46;&#x74;&#x65;&#x63;&#x68;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x73;&#x70;&#105;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#109;">&#x73;&#x70;&#105;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#104;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -109,9 +109,9 @@
       <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="ModularizationArchitecture" scheme="http://blog.spinytech.com/tags/ModularizationArchitecture/"/>
-    
       <category term="架构" scheme="http://blog.spinytech.com/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+      <category term="ModularizationArchitecture" scheme="http://blog.spinytech.com/tags/ModularizationArchitecture/"/>
     
   </entry>
   
@@ -164,7 +164,7 @@
 <p>测试类：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TestObject[] array = new TestObject[32];</span><br><span class="line">        for(int i = 0 ; i &lt; 32 ;i++)&#123;</span><br><span class="line">            array[i] = new TestObject();</span><br><span class="line">        &#125;</span><br><span class="line">        final ObjectPool&lt;TestObject&gt; objectPool = new ObjectPool&lt;&gt;(array);</span><br><span class="line"></span><br><span class="line">        for(int i = 0 ; i &lt; 50; i++)&#123;</span><br><span class="line">            new Thread(&quot;Thread:&quot;+i)&#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    super.run();</span><br><span class="line">                    for(int j = 0 ; j &lt; 50 ; j++)&#123;</span><br><span class="line">                        TestObject testObject = objectPool.obtain();</span><br><span class="line">                        testObject.print(getName(),&quot;--index:&quot;+j);</span><br><span class="line">                        objectPool.recycle(testObject);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class TestObject extends ObjectPool.RecyclableObject&#123;</span><br><span class="line">        public TestObject()&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        public void print(String thread, String index)&#123;</span><br><span class="line">            System.out.println(thread+index);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x73;&#112;&#x69;&#x6e;&#121;&#46;&#x74;&#x65;&#99;&#x68;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x73;&#112;&#x69;&#x6e;&#121;&#46;&#x74;&#x65;&#99;&#x68;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#115;&#x70;&#105;&#110;&#121;&#46;&#116;&#101;&#x63;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;">&#115;&#x70;&#105;&#110;&#121;&#46;&#116;&#101;&#x63;&#104;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -279,9 +279,9 @@
 <p>或者直接在项目中引入：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile &apos;com.spinytech.ma:macore:0.1.2&apos;</span><br></pre></td></tr></table></figure>
 <p>相关教程：<a href="http://blog.spinytech.com/2017/02/01/ma_get_start_cn/">ModularizationArchitecture 使用教程</a></p>
-<p>如果有疑问或者建议，欢迎联系我，邮箱是：<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#115;&#112;&#x69;&#110;&#x79;&#x2e;&#116;&#x65;&#99;&#104;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#115;&#112;&#x69;&#110;&#x79;&#x2e;&#116;&#x65;&#99;&#104;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a><br>谢谢大家阅读</p>
+<p>如果有疑问或者建议，欢迎联系我，邮箱是：<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x73;&#112;&#105;&#x6e;&#121;&#46;&#x74;&#x65;&#99;&#104;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x73;&#112;&#105;&#x6e;&#121;&#46;&#x74;&#x65;&#99;&#104;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;</a><br>谢谢大家阅读</p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x73;&#112;&#105;&#x6e;&#121;&#x2e;&#116;&#x65;&#x63;&#104;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x73;&#112;&#105;&#x6e;&#121;&#x2e;&#116;&#x65;&#x63;&#104;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#115;&#112;&#105;&#110;&#x79;&#46;&#116;&#101;&#x63;&#x68;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#115;&#112;&#105;&#110;&#x79;&#46;&#116;&#101;&#x63;&#x68;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -293,11 +293,11 @@
       <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
+      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
       <category term="架构思考" scheme="http://blog.spinytech.com/tags/%E6%9E%B6%E6%9E%84%E6%80%9D%E8%80%83/"/>
     
       <category term="模块化" scheme="http://blog.spinytech.com/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/"/>
-    
-      <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
     
   </entry>
   
@@ -337,7 +337,7 @@
 <p>到这篇文章截止，View视图三部曲就结束了，感谢阅读。</p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#115;&#x70;&#x69;&#110;&#x79;&#46;&#116;&#101;&#x63;&#x68;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#115;&#x70;&#x69;&#110;&#x79;&#46;&#116;&#101;&#x63;&#x68;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x73;&#x70;&#x69;&#x6e;&#121;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#x73;&#x70;&#x69;&#x6e;&#121;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -372,7 +372,7 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到这里就介绍完了View绘制的layout方法。比起measure，layout可是简单多了。不过这里还预留了一些坑，没有交代清楚，比如invalidate，还有RenderNode硬件加速等，以后会写一些笔记专门针对这些知识点做梳理。</p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#115;&#x70;&#x69;&#x6e;&#x79;&#x2e;&#116;&#101;&#99;&#x68;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;">&#115;&#x70;&#x69;&#x6e;&#x79;&#x2e;&#116;&#101;&#99;&#x68;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#x73;&#x70;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#99;&#x68;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#x70;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#99;&#x68;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -458,7 +458,7 @@
 <p>最后，感谢阅读，也希望可以和大家多多交流，共同进步。</p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x73;&#x70;&#x69;&#110;&#x79;&#x2e;&#x74;&#x65;&#x63;&#x68;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#x70;&#x69;&#110;&#x79;&#x2e;&#x74;&#x65;&#x63;&#x68;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#115;&#x70;&#x69;&#x6e;&#x79;&#46;&#116;&#x65;&#x63;&#x68;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#115;&#x70;&#x69;&#x6e;&#x79;&#46;&#116;&#x65;&#x63;&#x68;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -518,7 +518,7 @@
 <p><img src="http://ogsbxb571.bkt.clouddn.com/setContent%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="上图为Android setContentView的时序图"></p>
 <h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><p><a href="http://blog.spinytech.com/2016/12/02/android_view_draw_setcontentview/">Android 视图及View绘制分析笔记之setContentView</a><br><a href="http://blog.spinytech.com/2016/12/12/android_view_on_measure/">View绘制分析笔记之onMeasure</a><br><a href="http://blog.spinytech.com/2016/12/15/android_view_on_layout/">View绘制分析笔记之onLayout</a><br><a href="http://blog.spinytech.com/2016/12/19/android_view_on_draw/">View绘制分析笔记之onDraw</a>  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#115;&#x70;&#x69;&#110;&#121;&#46;&#116;&#101;&#x63;&#104;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;">&#115;&#x70;&#x69;&#110;&#121;&#46;&#116;&#101;&#x63;&#104;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#115;&#112;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#104;&#x40;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#115;&#112;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#104;&#x40;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -550,7 +550,7 @@
 <h3 id="Application会多次创建"><a href="#Application会多次创建" class="headerlink" title="Application会多次创建"></a>Application会多次创建</h3><p>每个新进程在创建的时候，都会新建一个Application，所以多进程还会面临着Application多次创建的问题，<code>onCreate</code>方法会多次被调用。解决的办法其实也不是很麻烦，因为Application会多次创建，所以我们可以根据进程名来区分不同的进程，进行不同的初始化，同时，不要在Application中设置过多的静态变量，导致内存增加。</p>
 <h3 id="文件读写潜在的问题"><a href="#文件读写潜在的问题" class="headerlink" title="文件读写潜在的问题"></a>文件读写潜在的问题</h3><p>这里的文件指的泛指所有需要并发访问的文件，例如：本地文件，数据库文件，sharepreference等。由于Java中，文件锁、队列机制都是VM级别的，所以不同进程访问同一个文件锁是不管用的。（通过C++可以实现多进程文件锁机制，不过不在文本讨论范围内。）所以在实际开发过程中，还是避免多进程同时访问统一文件，多利用Android中IPC的C/S思想，提供服务，接口调用，避免直接去访问对方进程的文件或者数据库，提升设计美感，同时也能提升代码的稳定性。</p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#115;&#112;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#x63;&#104;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#115;&#112;&#x69;&#110;&#x79;&#46;&#x74;&#101;&#x63;&#104;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#115;&#x70;&#x69;&#110;&#121;&#46;&#116;&#x65;&#99;&#104;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#109;">&#115;&#x70;&#x69;&#110;&#121;&#46;&#116;&#x65;&#99;&#104;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#109;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -631,7 +631,7 @@
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于多进程的使用场景今天大概先说这么多。使用多进程开发还是有很多好处的，不过也有不少坑，下一篇文章我就想总结一下<a href="http://blog.spinytech.com/2016/11/20/android_multiple_process_notice/">《多进程开发注意事项》</a>。 </p>
 <p>最后，多进程不一定适合所有的应用，合理利用分配进程，使程序更加稳定，才是我们追求的目标。  </p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x73;&#112;&#105;&#x6e;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#109;">&#x73;&#112;&#105;&#x6e;&#x79;&#46;&#x74;&#101;&#x63;&#x68;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#115;&#x70;&#105;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#x68;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;">&#115;&#x70;&#105;&#x6e;&#x79;&#46;&#116;&#101;&#99;&#x68;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
 <p>本文相关源码地址：<a href="https://github.com/SpinyTech/MultipleProcess" target="_blank" rel="external">MultipleProcess</a></p>
 ]]></content>
     
@@ -644,9 +644,9 @@
       <category term="Android" scheme="http://blog.spinytech.com/categories/Android/"/>
     
     
-      <category term="架构思考" scheme="http://blog.spinytech.com/tags/%E6%9E%B6%E6%9E%84%E6%80%9D%E8%80%83/"/>
-    
       <category term="多进程" scheme="http://blog.spinytech.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
+      <category term="架构思考" scheme="http://blog.spinytech.com/tags/%E6%9E%B6%E6%9E%84%E6%80%9D%E8%80%83/"/>
     
   </entry>
   
