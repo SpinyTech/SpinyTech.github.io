@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.spinytech.com/"/>
-  <updated>2017-02-05T12:53:30.000Z</updated>
+  <updated>2017-02-05T13:00:23.000Z</updated>
   <id>http://blog.spinytech.com/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="http://blog.spinytech.com/2017/02/01/ma_get_start_cn/"/>
     <id>http://blog.spinytech.com/2017/02/01/ma_get_start_cn/</id>
     <published>2017-02-01T12:00:00.000Z</published>
-    <updated>2017-02-05T12:53:30.000Z</updated>
+    <updated>2017-02-05T13:00:23.000Z</updated>
     
-    <content type="html"><![CDATA[<font color="red" size="4">项目地址：<a href="https://github.com/SpinyTech/ModularizationArchitecture" target="_blank" rel="external">ModularizationArchitecture</a><br>个人主页：<a href="https://github.com/SpinyTech" target="_blank" rel="external">SpinyTech</a><br><br>欢迎各位读者 Star Follow</font>
+    <content type="html"><![CDATA[<font color="red" size="4">项目地址：<a href="https://github.com/SpinyTech/ModularizationArchitecture" target="_blank" rel="external">ModularizationArchitecture</a><br>个人主页：<a href="https://github.com/SpinyTech" target="_blank" rel="external">SpinyTech</a><br><br>欢迎各位读者 Star Follow</font>  
 
 <p>ModularizationArchitecture 是Android平台上一种基于路由的多进程、组件化架构:它通过共有路由，在不引用其他模块的前提下，实现不同模块，不同进程之间的通信。它适合中型App架构的团队协作，并行开发，业务线解耦，白盒测试等场景。  </p>
 <h2 id="1-关键词定义"><a href="#1-关键词定义" class="headerlink" title="1. 关键词定义"></a>1. 关键词定义</h2><ul>
@@ -108,7 +108,7 @@ public void initializeAllProcessRouter() {
 <li>优化消息传递过程中的打包拆包过程</li>
 </ul>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x73;&#112;&#x69;&#110;&#121;&#x2e;&#x74;&#101;&#x63;&#104;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#x73;&#112;&#x69;&#110;&#121;&#x2e;&#x74;&#101;&#x63;&#104;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#115;&#112;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#115;&#112;&#x69;&#110;&#x79;&#x2e;&#116;&#101;&#x63;&#x68;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
@@ -199,7 +199,7 @@ public void initializeAllProcessRouter() {
     <link href="http://blog.spinytech.com/2016/12/28/android_modularization/"/>
     <id>http://blog.spinytech.com/2016/12/28/android_modularization/</id>
     <published>2016-12-28T12:00:00.000Z</published>
-    <updated>2017-01-24T15:14:25.000Z</updated>
+    <updated>2017-02-05T12:56:56.000Z</updated>
     
     <content type="html"><![CDATA[<p>关于<strong>模块化(组件化)</strong>这个问题，我想每个开发者可能都认真的思考过。随着项目的开发，<strong>业务不断壮大，业务模块越来越多，各个模块间相互引用，耦合越来越严重</strong>，同时有些项目（比如我们公司）还伴随着子应用单独包装推广，影子应用单独发布等等需求，重新调整架构迫在眉睫。今天，我们就来聊聊模块化(组件化)，这篇文章同时也是我这几年，对项目架构的理解。</p>
 <h2 id="最初的超小型项目"><a href="#最初的超小型项目" class="headerlink" title="最初的超小型项目"></a>最初的超小型项目</h2><p>当我们最开始做Android项目的时候，大多数人都是没考虑项目架构的，我们先上一张图。<br><img src="http://ogsbxb571.bkt.clouddn.com/old_architecture1.jpg" alt="2012年开发的一个小项目"></p>
@@ -289,10 +289,10 @@ public void initializeAllProcessRouter() {
 <p>本文项目地址：<a href="https://github.com/SpinyTech/ModularizationArchitecture" target="_blank" rel="external">ModularizationArchitecture</a>，欢迎大家star、fork、提建议。</p>
 <p>或者直接在项目中引入：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile &apos;com.spinytech.ma:macore:0.1.2&apos;</span><br></pre></td></tr></table></figure>
-<p>//TODO<br>相关教程：开始使用</p>
-<p>如果有疑问或者建议，欢迎联系我，邮箱是：<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#115;&#x70;&#105;&#x6e;&#121;&#x2e;&#116;&#x65;&#99;&#104;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#115;&#x70;&#105;&#x6e;&#121;&#x2e;&#116;&#x65;&#99;&#104;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a><br>谢谢大家阅读</p>
+<p>相关教程：<a href="http://blog.spinytech.com/2017/02/01/ma_get_start_cn/">ModularizationArchitecture 使用教程</a></p>
+<p>如果有疑问或者建议，欢迎联系我，邮箱是：<a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#115;&#112;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#x68;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#115;&#112;&#x69;&#110;&#121;&#46;&#116;&#x65;&#x63;&#x68;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a><br>谢谢大家阅读</p>
 <hr>
-<p>原创文章，转载请先联系作者：<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#115;&#112;&#x69;&#110;&#121;&#x2e;&#116;&#101;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#115;&#112;&#x69;&#110;&#121;&#x2e;&#116;&#101;&#99;&#x68;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>原创文章，转载请先联系作者：<a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#115;&#x70;&#105;&#110;&#121;&#46;&#x74;&#x65;&#x63;&#104;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;">&#115;&#x70;&#105;&#110;&#121;&#46;&#x74;&#x65;&#x63;&#104;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
 ]]></content>
     
     <summary type="html">
