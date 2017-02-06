@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://blog.spinytech.com/2017/02/03/ma_get_start_en/</loc>
-    <lastmod>2017-02-05T14:59:10.000Z</lastmod>
+    <lastmod>2017-02-06T12:56:50.000Z</lastmod>
     <data>
         <display>
         <title>The guide of the ModularizationArchitecture</title>
@@ -27,7 +27,7 @@
     
   <url>
     <loc>http://blog.spinytech.com/2017/02/01/ma_get_start_cn/</loc>
-    <lastmod>2017-02-05T14:18:51.000Z</lastmod>
+    <lastmod>2017-02-06T12:55:33.000Z</lastmod>
     <data>
         <display>
         <title>ModularizationArchitecture 使用教程</title>
@@ -55,11 +55,11 @@
         <title>Android架构思考(模块化、多进程)</title>
         <pubTime>2016-12-28T12:00:00.000Z</pubTime>
         
+        <tag>多进程</tag>
+         
         <tag>架构思考</tag>
          
         <tag>模块化</tag>
-         
-        <tag>多进程</tag>
          
          
            
@@ -183,9 +183,9 @@
         <title>Android多进程使用场景</title>
         <pubTime>2016-11-17T12:00:00.000Z</pubTime>
         
-        <tag>架构思考</tag>
-         
         <tag>多进程</tag>
+         
+        <tag>架构思考</tag>
          
          
            
