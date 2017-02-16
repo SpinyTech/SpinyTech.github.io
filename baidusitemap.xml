@@ -5,15 +5,15 @@
     
   <url>
     <loc>http://blog.spinytech.com/2017/02/01/ma_get_start_cn/</loc>
-    <lastmod>2017-02-15T11:21:18.000Z</lastmod>
+    <lastmod>2017-02-16T02:03:43.000Z</lastmod>
     <data>
         <display>
         <title>ModularizationArchitecture 使用教程</title>
         <pubTime>2017-02-01T12:00:00.000Z</pubTime>
         
-        <tag>ModularizationArchitecture</tag>
-         
         <tag>架构</tag>
+         
+        <tag>ModularizationArchitecture</tag>
          
          
            
@@ -27,7 +27,7 @@
     
   <url>
     <loc>http://blog.spinytech.com/2017/02/03/ma_get_start_en/</loc>
-    <lastmod>2017-02-15T11:20:46.000Z</lastmod>
+    <lastmod>2017-02-16T02:03:38.000Z</lastmod>
     <data>
         <display>
         <title>The guide of the ModularizationArchitecture</title>
@@ -36,6 +36,30 @@
         <tag>ModularizationArchitecture</tag>
          
         <tag>Architecture</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://blog.spinytech.com/2016/12/28/android_modularization/</loc>
+    <lastmod>2017-02-16T01:06:28.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android架构思考(模块化、多进程)</title>
+        <pubTime>2016-12-28T12:00:00.000Z</pubTime>
+        
+        <tag>架构思考</tag>
+         
+        <tag>模块化</tag>
+         
+        <tag>多进程</tag>
          
          
            
@@ -63,30 +87,6 @@
            
              
               <breadCrumb title="Java" url="http://blog.spinytech.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://blog.spinytech.com/2016/12/28/android_modularization/</loc>
-    <lastmod>2017-02-15T08:18:32.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android架构思考(模块化、多进程)</title>
-        <pubTime>2016-12-28T12:00:00.000Z</pubTime>
-        
-        <tag>架构思考</tag>
-         
-        <tag>模块化</tag>
-         
-        <tag>多进程</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://blog.spinytech.com/categories/Android/"/>
           
         </display>
     </data>
