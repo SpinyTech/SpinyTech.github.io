@@ -55,11 +55,11 @@
         <title>Android架构思考(模块化、多进程)</title>
         <pubTime>2016-12-28T12:00:00.000Z</pubTime>
         
-        <tag>多进程</tag>
-         
         <tag>架构思考</tag>
          
         <tag>模块化</tag>
+         
+        <tag>多进程</tag>
          
          
            
@@ -183,9 +183,9 @@
         <title>Android多进程使用场景</title>
         <pubTime>2016-11-17T12:00:00.000Z</pubTime>
         
-        <tag>多进程</tag>
-         
         <tag>架构思考</tag>
+         
+        <tag>多进程</tag>
          
          
            
